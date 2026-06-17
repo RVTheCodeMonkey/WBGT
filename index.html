@@ -69,9 +69,15 @@
             box-sizing: border-box;
             font-size: 16px;
         }
-        #checkBtn {
+        .row {
+            display: flex;
+            gap: 10px;
+        }
+        .row > * {
+            flex: 1;
+        }
+        #checkBtn, #locationBtn {
             width: 100%;
-            background-color: #e67e22;
             color: white;
             border: none;
             padding: 12px;
@@ -81,8 +87,21 @@
             cursor: pointer;
             transition: background 0.2s;
         }
+        #checkBtn {
+            background-color: #e67e22;
+        }
         #checkBtn:hover {
             background-color: #d35400;
+        }
+        #locationBtn {
+            background-color: #3498db;
+        }
+        #locationBtn:hover {
+            background-color: #2980b9;
+        }
+        #locationBtn:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
         }
         .result-box {
             margin-top: 25px;
@@ -144,7 +163,10 @@
         </select>
     </div>
 
-    <button id="checkBtn" onclick="calculateMetrics()" data-i18n="button">Controleer Status</button>
+    <div class="row">
+        <button id="checkBtn" onclick="calculateMetrics()" data-i18n="button">Controleer Status</button>
+        <button id="locationBtn" onclick="getLocationAndWeather()" data-i18n="use_location">Gebruik mijn locatie</button>
+    </div>
 
     <div id="result" class="result-box">
         <h3 id="status-title"></h3>
@@ -185,7 +207,10 @@ const translations = {
         danger_3: "Indien de overschrijding aanhoudt: voer een regime in van beperkte aanwezigheid op de werkpost en voorzie verplichte rusttijden (pauzes in een koele ruimte).",
         safe_text: "De berekende warmte-index ligt binnen de wettelijk toegestane grenzen voor dit type werkbelasting. Blijf de situatie monitoren bij stijgende temperaturen.",
         disclaimer: "* <strong>Belangrijke beperking:</strong> Deze tool schat de WBGT-index op basis van de tabel op p. 17 van de FOD-brochure. Dit is geldig in afwezigheid van directe zonnestraling of stralingswarmte van machines. Indien er wél stralingswarmte aanwezig is, dient er een fysieke meting met een zwarte-bolthermometer te gebeuren.",
-        alert: "Vul aub geldige waarden in voor temperatuur en luchtvochtigheid."
+        alert: "Vul aub geldige waarden in voor temperatuur en luchtvochtigheid.",
+        use_location: "Gebruik mijn locatie",
+        location_loading: "Locatie ophalen...",
+        location_error: "Kon locatie of weerdata niet ophalen."
     },
     en: {
         title: "Legal Heat-at-Work Calculator (Belgium)",
@@ -212,7 +237,10 @@ const translations = {
         danger_3: "If the exceedance persists: implement a regime of limited presence at the workstation and provide mandatory rest periods (breaks in a cool room).",
         safe_text: "The calculated heat index is within the legally permitted limits for this type of workload. Continue monitoring the situation if temperatures rise.",
         disclaimer: "* <strong>Important limitation:</strong> This tool estimates the WBGT index based on the table on p. 17 of the FPS brochure. This is valid in the absence of direct solar radiation or radiant heat from machinery. If radiant heat is present, a physical measurement with a black globe thermometer must be performed.",
-        alert: "Please enter valid values for temperature and humidity."
+        alert: "Please enter valid values for temperature and humidity.",
+        use_location: "Use my location",
+        location_loading: "Getting location...",
+        location_error: "Could not retrieve location or weather data."
     },
     fr: {
         title: "Calculateur Légal de Chaleur au Travail (Belgique)",
@@ -239,7 +267,10 @@ const translations = {
         danger_3: "Si le dépassement persiste : instaurer un régime de présence limitée au poste de travail et prévoir des temps de repos obligatoires (pauses dans un local frais).",
         safe_text: "L'indice de chaleur calculé se situe dans les limites légalement autorisées pour ce type de charge de travail. Continuez à surveiller la situation si les températures augmentent.",
         disclaimer: "* <strong>Limitation importante :</strong> Cet outil estime l'indice WBGT sur base du tableau à la p. 17 de la brochure du SPF. Ceci est valable en l'absence de rayonnement solaire direct ou de chaleur radiante provenant de machines. En présence de chaleur radiante, une mesure physique avec un thermomètre à globe noir doit être effectuée.",
-        alert: "Veuillez entrer des valeurs valides pour la température et l'humidité."
+        alert: "Veuillez entrer des valeurs valides pour la température et l'humidité.",
+        use_location: "Utiliser ma position",
+        location_loading: "Obtention de la position...",
+        location_error: "Impossible d'obtenir la position ou les données météo."
     }
 };
 
@@ -271,6 +302,38 @@ function setLanguage(lang) {
     if (resultBox.style.display === "block") {
         calculateMetrics();
     }
+}
+
+function getLocationAndWeather() {
+    const btn = document.getElementById("locationBtn");
+    const t = translations[currentLang];
+    if (!navigator.geolocation) {
+        alert(t.location_error);
+        return;
+    }
+    btn.disabled = true;
+    btn.innerText = t.location_loading;
+    navigator.geolocation.getCurrentPosition(async pos => {
+        const { latitude, longitude } = pos.coords;
+        try {
+            const res = await fetch(
+                `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m`
+            );
+            const data = await res.json();
+            const temp = data.current.temperature_2m;
+            const hum = data.current.relative_humidity_2m;
+            document.getElementById("temp").value = temp;
+            document.getElementById("humidity").value = hum;
+        } catch {
+            alert(t.location_error);
+        }
+        btn.disabled = false;
+        btn.innerText = t.use_location;
+    }, () => {
+        alert(t.location_error);
+        btn.disabled = false;
+        btn.innerText = t.use_location;
+    }, { timeout: 10000 });
 }
 
 function calculateMetrics() {
