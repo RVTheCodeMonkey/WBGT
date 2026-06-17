@@ -27,6 +27,31 @@
             border-bottom: 2px solid #ecf0f1;
             padding-bottom: 10px;
         }
+        .lang-switcher {
+            text-align: right;
+            margin-bottom: 15px;
+        }
+        .lang-switcher button {
+            width: auto;
+            padding: 6px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            background: none;
+            border: 1px solid #bdc3c7;
+            color: #7f8c8d;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-left: 5px;
+        }
+        .lang-switcher button:hover {
+            background: #ecf0f1;
+        }
+        .lang-switcher button.active {
+            background: #2c3e50;
+            color: #fff;
+            border-color: #2c3e50;
+        }
         .form-group {
             margin-bottom: 15px;
         }
@@ -44,7 +69,7 @@
             box-sizing: border-box;
             font-size: 16px;
         }
-        button {
+        #checkBtn {
             width: 100%;
             background-color: #e67e22;
             color: white;
@@ -56,7 +81,7 @@
             cursor: pointer;
             transition: background 0.2s;
         }
-        button:hover {
+        #checkBtn:hover {
             background-color: #d35400;
         }
         .result-box {
@@ -90,91 +115,210 @@
 <body>
 
 <div class="calculator-card">
-    <h2>Hitte op het Werk Check</h2>
-    <p style="font-size: 14px; color: #7f8c8d;">Bereken conform de Belgische Welzijnswetgeving of actiewaarden zijn overschreden.</p>
-    
-    <div class="form-group">
-        <label for="temp">Luchttemperatuur (°C):</label>
-        <input type="number" id="temp" placeholder="Bijv. 30" min="15" max="45" step="0.1" required>
+    <div class="lang-switcher">
+        <button onclick="setLanguage('nl')" id="lang-nl" class="active">NL</button>
+        <button onclick="setLanguage('en')" id="lang-en">EN</button>
+        <button onclick="setLanguage('fr')" id="lang-fr">FR</button>
     </div>
-    
+
+    <h2 data-i18n="heading">Hitte op het Werk Check</h2>
+    <p style="font-size: 14px; color: #7f8c8d;" data-i18n="desc">Bereken conform de Belgische Welzijnswetgeving of actiewaarden zijn overschreden.</p>
+
     <div class="form-group">
-        <label for="humidity">Relatieve Luchtvochtigheid (%):</label>
-        <input type="number" id="humidity" placeholder="Bijv. 55" min="0" max="100" required>
+        <label for="temp" data-i18n="temp_label">Luchttemperatuur (°C):</label>
+        <input type="number" id="temp" data-i18n-placeholder="temp_placeholder" placeholder="Bijv. 30" min="15" max="45" step="0.1" required>
     </div>
-    
+
     <div class="form-group">
-        <label for="workload">Type fysieke werkbelasting:</label>
+        <label for="humidity" data-i18n="humidity_label">Relatieve Luchtvochtigheid (%):</label>
+        <input type="number" id="humidity" data-i18n-placeholder="humidity_placeholder" placeholder="Bijv. 55" min="0" max="100" required>
+    </div>
+
+    <div class="form-group">
+        <label for="workload" data-i18n="workload_label">Type fysieke werkbelasting:</label>
         <select id="workload">
-            <option value="29">Licht werk (bijv. administratie, computerwerk) - limiet: 29</option>
-            <option value="26">Middelzwaar werk (bijv. machinaal hanteren, chauffeur) - limiet: 26</option>
-            <option value="22">Zwaar werk (bijv. timmer- of bouwwerken, tuinbouw) - limiet: 22</option>
-            <option value="18">Zeer zwaar werk (bijv. intensief graven, snel hardlopen) - limiet: 18</option>
+            <option value="29" data-i18n="workload_light">Licht werk (bijv. administratie, computerwerk) - limiet: 29</option>
+            <option value="26" data-i18n="workload_moderate">Middelzwaar werk (bijv. machinaal hanteren, chauffeur) - limiet: 26</option>
+            <option value="22" data-i18n="workload_heavy">Zwaar werk (bijv. timmer- of bouwwerken, tuinbouw) - limiet: 22</option>
+            <option value="18" data-i18n="workload_very_heavy">Zeer zwaar werk (bijv. intensief graven, snel hardlopen) - limiet: 18</option>
         </select>
     </div>
-    
-    <button onclick="calculateMetrics()">Controleer Status</button>
-    
+
+    <button id="checkBtn" onclick="calculateMetrics()" data-i18n="button">Controleer Status</button>
+
     <div id="result" class="result-box">
-        <h3 id="status-title">Resultaat</h3>
-        <p>Berekende WBGT-index: <strong id="wbgt-val">0</strong></p>
-        <p>Wettelijke limiet voor dit werk: <strong id="limit-val">0</strong></p>
+        <h3 id="status-title"></h3>
+        <p><span data-i18n="wbgt_label">Berekende WBGT-index:</span> <strong id="wbgt-val">0</strong></p>
+        <p><span data-i18n="limit_label">Wettelijke limiet voor dit werk:</span> <strong id="limit-val">0</strong></p>
         <div id="legal-actions"></div>
     </div>
-    
-    <div class="disclaimer">
+
+    <div class="disclaimer" data-i18n="disclaimer">
         * <strong>Belangrijke beperking:</strong> Deze tool schat de WBGT-index op basis van de tabel op p. 17 van de FOD-brochure. Dit is geldig in afwezigheid van directe zonnestraling of stralingswarmte van machines. Indien er wél stralingswarmte aanwezig is, dient er een fysieke meting met een zwarte-bolthermometer te gebeuren.
     </div>
 </div>
 
 <script>
+const translations = {
+    nl: {
+        title: "Wettelijke Hitte-op-het-Werk Calculator (België)",
+        heading: "Hitte op het Werk Check",
+        desc: "Bereken conform de Belgische Welzijnswetgeving of actiewaarden zijn overschreden.",
+        temp_label: "Luchttemperatuur (°C):",
+        temp_placeholder: "Bijv. 30",
+        humidity_label: "Relatieve Luchtvochtigheid (%):",
+        humidity_placeholder: "Bijv. 55",
+        workload_label: "Type fysieke werkbelasting:",
+        workload_light: "Licht werk (bijv. administratie, computerwerk) - limiet: 29",
+        workload_moderate: "Middelzwaar werk (bijv. machinaal hanteren, chauffeur) - limiet: 26",
+        workload_heavy: "Zwaar werk (bijv. timmer- of bouwwerken, tuinbouw) - limiet: 22",
+        workload_very_heavy: "Zeer zwaar werk (bijv. intensief graven, snel hardlopen) - limiet: 18",
+        button: "Controleer Status",
+        status_title_danger: "⚠️ Actiewaarde Overschreden!",
+        status_title_safe: "🟢 Veilige Werkzone",
+        wbgt_label: "Berekende WBGT-index:",
+        limit_label: "Wettelijke limiet voor dit werk:",
+        wbgt_unit: "WBGT",
+        danger_heading: "Wettelijk verplichte maatregelen voor de werkgever:",
+        danger_1: "Stel gratis geschikte, verfrissende dranken ter beschikking.",
+        danger_2: "Voorzie binnen de 48 uur kunstmatige ventilatie (conform de richtlijnen voor luchtverversing).",
+        danger_3: "Indien de overschrijding aanhoudt: voer een regime in van beperkte aanwezigheid op de werkpost en voorzie verplichte rusttijden (pauzes in een koele ruimte).",
+        safe_text: "De berekende warmte-index ligt binnen de wettelijk toegestane grenzen voor dit type werkbelasting. Blijf de situatie monitoren bij stijgende temperaturen.",
+        disclaimer: "* <strong>Belangrijke beperking:</strong> Deze tool schat de WBGT-index op basis van de tabel op p. 17 van de FOD-brochure. Dit is geldig in afwezigheid van directe zonnestraling of stralingswarmte van machines. Indien er wél stralingswarmte aanwezig is, dient er een fysieke meting met een zwarte-bolthermometer te gebeuren.",
+        alert: "Vul aub geldige waarden in voor temperatuur en luchtvochtigheid."
+    },
+    en: {
+        title: "Legal Heat-at-Work Calculator (Belgium)",
+        heading: "Heat at Work Check",
+        desc: "Calculate whether action values are exceeded in accordance with Belgian Welfare Legislation.",
+        temp_label: "Air Temperature (°C):",
+        temp_placeholder: "E.g. 30",
+        humidity_label: "Relative Humidity (%):",
+        humidity_placeholder: "E.g. 55",
+        workload_label: "Type of physical workload:",
+        workload_light: "Light work (e.g. office, computer work) - limit: 29",
+        workload_moderate: "Moderate work (e.g. machine handling, driver) - limit: 26",
+        workload_heavy: "Heavy work (e.g. carpentry, construction, horticulture) - limit: 22",
+        workload_very_heavy: "Very heavy work (e.g. intensive digging, fast running) - limit: 18",
+        button: "Check Status",
+        status_title_danger: "⚠️ Action Value Exceeded!",
+        status_title_safe: "🟢 Safe Work Zone",
+        wbgt_label: "Calculated WBGT index:",
+        limit_label: "Legal limit for this work:",
+        wbgt_unit: "WBGT",
+        danger_heading: "Legally required measures for the employer:",
+        danger_1: "Provide free, suitable refreshing drinks.",
+        danger_2: "Provide artificial ventilation within 48 hours (in accordance with air exchange guidelines).",
+        danger_3: "If the exceedance persists: implement a regime of limited presence at the workstation and provide mandatory rest periods (breaks in a cool room).",
+        safe_text: "The calculated heat index is within the legally permitted limits for this type of workload. Continue monitoring the situation if temperatures rise.",
+        disclaimer: "* <strong>Important limitation:</strong> This tool estimates the WBGT index based on the table on p. 17 of the FPS brochure. This is valid in the absence of direct solar radiation or radiant heat from machinery. If radiant heat is present, a physical measurement with a black globe thermometer must be performed.",
+        alert: "Please enter valid values for temperature and humidity."
+    },
+    fr: {
+        title: "Calculateur Légal de Chaleur au Travail (Belgique)",
+        heading: "Contrôle Chaleur au Travail",
+        desc: "Calculez si les valeurs d'action sont dépassées conformément à la Législation belge sur le bien-être.",
+        temp_label: "Température de l'air (°C):",
+        temp_placeholder: "P. ex. 30",
+        humidity_label: "Humidité Relative (%):",
+        humidity_placeholder: "P. ex. 55",
+        workload_label: "Type de charge de travail physique:",
+        workload_light: "Travail léger (p. ex. administratif, ordinateur) - limite: 29",
+        workload_moderate: "Travail moyen (p. ex. manipulation mécanique, chauffeur) - limite: 26",
+        workload_heavy: "Travail lourd (p. ex. menuiserie, construction, horticulture) - limite: 22",
+        workload_very_heavy: "Travail très lourd (p. ex. creusement intensif, course rapide) - limite: 18",
+        button: "Vérifier le Statut",
+        status_title_danger: "⚠️ Valeur d'Action Dépassée!",
+        status_title_safe: "🟢 Zone de Travail Sûre",
+        wbgt_label: "Indice WBGT calculé:",
+        limit_label: "Limite légale pour ce travail:",
+        wbgt_unit: "WBGT",
+        danger_heading: "Mesures légalement obligatoires pour l'employeur:",
+        danger_1: "Mettre à disposition des boissons rafraîchissantes gratuites et appropriées.",
+        danger_2: "Assurer une ventilation artificielle dans les 48 heures (conformément aux directives de renouvellement d'air).",
+        danger_3: "Si le dépassement persiste : instaurer un régime de présence limitée au poste de travail et prévoir des temps de repos obligatoires (pauses dans un local frais).",
+        safe_text: "L'indice de chaleur calculé se situe dans les limites légalement autorisées pour ce type de charge de travail. Continuez à surveiller la situation si les températures augmentent.",
+        disclaimer: "* <strong>Limitation importante :</strong> Cet outil estime l'indice WBGT sur base du tableau à la p. 17 de la brochure du SPF. Ceci est valable en l'absence de rayonnement solaire direct ou de chaleur radiante provenant de machines. En présence de chaleur radiante, une mesure physique avec un thermomètre à globe noir doit être effectuée.",
+        alert: "Veuillez entrer des valeurs valides pour la température et l'humidité."
+    }
+};
+
+let currentLang = 'nl';
+
+function translatePage(lang) {
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.dataset.i18n;
+        if (translations[lang][key]) {
+            el.innerHTML = translations[lang][key];
+        }
+    });
+    document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+        const key = el.dataset.i18nPlaceholder;
+        if (translations[lang][key]) {
+            el.placeholder = translations[lang][key];
+        }
+    });
+    document.title = translations[lang].title;
+    document.documentElement.lang = lang;
+}
+
+function setLanguage(lang) {
+    currentLang = lang;
+    document.querySelectorAll(".lang-switcher button").forEach(btn => btn.classList.remove("active"));
+    document.getElementById("lang-" + lang).classList.add("active");
+    translatePage(lang);
+    const resultBox = document.getElementById("result");
+    if (resultBox.style.display === "block") {
+        calculateMetrics();
+    }
+}
+
 function calculateMetrics() {
-    const ta = parseFloat(document.getElementById('temp').value);
-    const rh = parseFloat(document.getElementById('humidity').value);
-    const limit = parseFloat(document.getElementById('workload').value);
-    const resultBox = document.getElementById('result');
-    
+    const ta = parseFloat(document.getElementById("temp").value);
+    const rh = parseFloat(document.getElementById("humidity").value);
+    const limit = parseFloat(document.getElementById("workload").value);
+    const resultBox = document.getElementById("result");
+    const t = translations[currentLang];
+
     if (isNaN(ta) || isNaN(rh)) {
-        alert("Vul aub geldige waarden in voor temperatuur en luchtvochtigheid.");
+        alert(t.alert);
         return;
     }
 
-    // Formule van Stull voor de Natteboltemperatuur (Twb)
-    let twb = ta * Math.atan(0.151977 * Math.sqrt(rh + 8.313659)) 
-            + Math.atan(ta + rh) 
-            - Math.atan(rh - 1.676331) 
-            + 0.00391838 * Math.pow(rh, 1.5) * Math.atan(0.023101 * rh) 
+    let twb = ta * Math.atan(0.151977 * Math.sqrt(rh + 8.313659))
+            + Math.atan(ta + rh)
+            - Math.atan(rh - 1.676331)
+            + 0.00391838 * Math.pow(rh, 1.5) * Math.atan(0.023101 * rh)
             - 4.686035;
-            
-    // Berekening WBGT in de schaduw / binnen (Tg = Ta)
-    let wbgt = (0.7 * twb) + (0.3 * ta);
-    wbgt = Math.round(wbgt * 10) / 10; // Afronden op 1 decimaal
 
-    // Elementen updaten
-    document.getElementById('wbgt-val').innerText = wbgt + " WBGT";
-    document.getElementById('limit-val').innerText = limit + " WBGT";
+    let wbgt = (0.7 * twb) + (0.3 * ta);
+    wbgt = Math.round(wbgt * 10) / 10;
+
+    document.getElementById("wbgt-val").innerText = wbgt + " " + t.wbgt_unit;
+    document.getElementById("limit-val").innerText = limit + " " + t.wbgt_unit;
     resultBox.style.display = "block";
-    
-    const actionsDiv = document.getElementById('legal-actions');
-    
+
+    const actionsDiv = document.getElementById("legal-actions");
+
     if (wbgt >= limit) {
         resultBox.className = "result-box danger";
-        document.getElementById('status-title').innerText = "⚠️ Actiewaarde Overschreden!";
-        
+        document.getElementById("status-title").innerText = t.status_title_danger;
         actionsDiv.innerHTML = `
-            <p><strong>Wettelijk verplichte maatregelen voor de werkgever:</strong></p>
+            <p><strong>${t.danger_heading}</strong></p>
             <ul class="actions-list">
-                <li>Stel gratis geschikte, verfrissende dranken ter beschikking.</li>
-                <li>Voorzie binnen de 48 uur kunstmatige ventilatie (conform de richtlijnen voor luchtverversing).</li>
-                <li>Indien de overschrijding aanhoudt: voer een regime in van beperkte aanwezigheid op de werkpost en voorzie verplichte rusttijden (pauzes in een koele ruimte).</li>
+                <li>${t.danger_1}</li>
+                <li>${t.danger_2}</li>
+                <li>${t.danger_3}</li>
             </ul>
         `;
     } else {
         resultBox.className = "result-box safe";
-        document.getElementById('status-title').innerText = "🟢 Veilige Werkzone";
-        actionsDiv.innerHTML = "<p>De berekende warmte-index ligt binnen de wettelijk toegestane grenzen voor dit type werkbelasting. Blijf de situatie monitoren bij stijgende temperaturen.</p>";
+        document.getElementById("status-title").innerText = t.status_title_safe;
+        actionsDiv.innerHTML = `<p>${t.safe_text}</p>`;
     }
 }
+
+translatePage('nl');
 </script>
 
 </body>
