@@ -1,10 +1,12 @@
-const CACHE = "wbgt-v1";
+const CACHE = "wbgt-v2";
 
 self.addEventListener("install", event => {
     event.waitUntil(
         caches.open(CACHE).then(cache =>
             cache.addAll([
+                "/",
                 "index.html",
+                "support.js",
                 "manifest.json",
                 "icons/icon-192.png",
                 "icons/icon-512.png"

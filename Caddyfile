@@ -1,0 +1,12 @@
+wbgt.corebase.be, corebase.be {
+    root * /usr/share/caddy
+    file_server
+    encode zstd gzip
+
+    header / {
+        Cache-Control "no-cache"
+    }
+    header /icons/* Cache-Control "public, immutable, max-age=2592000"
+    header /manifest.json Cache-Control "public, immutable, max-age=2592000"
+    header /sw.js Cache-Control "no-cache"
+}

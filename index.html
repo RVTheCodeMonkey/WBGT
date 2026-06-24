@@ -1,416 +1,523 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#e67e22">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="icons/icon-192.png">
-    <title>Wettelijke Hitte-op-het-Werk Calculator (België)</title>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
-            color: #333;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-        }
-        .calculator-card {
-            background: #ffffff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            max-width: 500px;
-            width: 100%;
-        }
-        h2 {
-            color: #2c3e50;
-            margin-top: 0;
-            border-bottom: 2px solid #ecf0f1;
-            padding-bottom: 10px;
-        }
-        .lang-switcher {
-            text-align: right;
-            margin-bottom: 15px;
-        }
-        .lang-switcher button {
-            width: auto;
-            padding: 6px 14px;
-            font-size: 13px;
-            font-weight: 600;
-            background: none;
-            border: 1px solid #bdc3c7;
-            color: #7f8c8d;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin-left: 5px;
-        }
-        .lang-switcher button:hover {
-            background: #ecf0f1;
-        }
-        .lang-switcher button.active {
-            background: #2c3e50;
-            color: #fff;
-            border-color: #2c3e50;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            color: #34495e;
-        }
-        input, select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #bdc3c7;
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 16px;
-        }
-        .row {
-            display: flex;
-            gap: 10px;
-        }
-        .row > * {
-            flex: 1;
-        }
-        #checkBtn, #locationBtn {
-            width: 100%;
-            color: white;
-            border: none;
-            padding: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        #checkBtn {
-            background-color: #e67e22;
-        }
-        #checkBtn:hover {
-            background-color: #d35400;
-        }
-        #locationBtn {
-            background-color: #3498db;
-        }
-        #locationBtn:hover {
-            background-color: #2980b9;
-        }
-        #locationBtn:disabled {
-            background-color: #95a5a6;
-            cursor: not-allowed;
-        }
-        .result-box {
-            margin-top: 25px;
-            padding: 20px;
-            border-radius: 8px;
-            display: none;
-        }
-        .safe {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        .danger {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        .actions-list {
-            margin-top: 10px;
-            padding-left: 20px;
-        }
-        .disclaimer {
-            font-size: 11px;
-            color: #7f8c8d;
-            margin-top: 20px;
-            line-height: 1.4;
-        }
-        .ad-container {
-            max-width: 500px;
-            margin: 20px auto 0;
-            min-height: 100px;
-            text-align: center;
-        }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="google-adsense-account" content="ca-pub-8551542721274566">
+<link rel="icon" href="icons/icon-192.png" sizes="any">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8551542721274566" crossorigin="anonymous"></script>
+<script src="./support.js"></script>
 </head>
 <body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'IBM Plex Sans',system-ui,sans-serif;background:#f3efe9;color:#2b2520;-webkit-font-smoothing:antialiased}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+  input::placeholder{color:#a89f93}
+  .layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+  .rightcol{display:flex;flex-direction:column;gap:16px;min-width:0}
+  @media(max-width:760px){.layout{grid-template-columns:1fr}}
+</style>
+</helmet>
 
-<div class="calculator-card">
-    <div class="lang-switcher">
-        <button onclick="setLanguage('nl')" id="lang-nl" class="active">NL</button>
-        <button onclick="setLanguage('en')" id="lang-en">EN</button>
-        <button onclick="setLanguage('fr')" id="lang-fr">FR</button>
+<div style="min-height:100vh;display:flex;justify-content:center;align-items:flex-start;padding:28px 16px 56px">
+  <div style="width:100%;max-width:980px">
+
+    <!-- ===== HEADER ===== -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 35% 32%,#fbb24a,#e67e22 62%,#c85e10);box-shadow:0 2px 10px rgba(230,126,34,.35);flex:none"></div>
+        <div style="font-weight:700;font-size:19px;letter-spacing:-.01em;white-space:nowrap">{{ t.heading }}</div>
+      </div>
+      <div style="display:flex;gap:6px">
+        <sc-for list="{{ langs }}" as="lng" hint-placeholder-count="3">
+          <button onClick="{{ lng.onClick }}" style="{{ lng.style }}">{{ lng.label }}</button>
+        </sc-for>
+      </div>
     </div>
+    <p style="font-size:13.5px;line-height:1.5;color:#6f665b;margin:0 0 22px">{{ t.desc }}</p>
 
-    <h2 data-i18n="heading">Hitte op het Werk Check</h2>
-    <p style="font-size: 14px; color: #7f8c8d;" data-i18n="desc">Bereken conform de Belgische Welzijnswetgeving of actiewaarden zijn overschreden.</p>
+    <div class="layout">
+    <div style="min-width:0">
 
-    <div class="form-group">
-        <label for="temp" data-i18n="temp_label">Luchttemperatuur (°C):</label>
-        <input type="number" id="temp" data-i18n-placeholder="temp_placeholder" placeholder="Bijv. 30" min="15" max="45" step="0.1" required>
-    </div>
+    <!-- ===== CARD ===== -->
+    <div style="background:#fff;border:1px solid #ece5db;border-radius:18px;padding:22px;box-shadow:0 10px 30px rgba(80,60,30,.06)">
 
-    <div class="form-group">
-        <label for="humidity" data-i18n="humidity_label">Relatieve Luchtvochtigheid (%):</label>
-        <input type="number" id="humidity" data-i18n-placeholder="humidity_placeholder" placeholder="Bijv. 55" min="0" max="100" required>
-    </div>
+      <!-- location -->
+      <div style="display:flex;gap:8px;margin-bottom:10px">
+        <input value="{{ query }}" onInput="{{ onQuery }}" onKeyDown="{{ onQueryKey }}" placeholder="{{ t.loc_search_ph }}" style="flex:1;min-width:0;padding:11px 13px;border:1px solid #ddd3c6;border-radius:10px;font-size:15px;font-family:inherit;background:#faf7f2" style-focus="border-color:#e67e22;outline:none;background:#fff">
+        <button onClick="{{ onSearch }}" style="flex:none;padding:0 16px;border:none;border-radius:10px;background:#2b2520;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit" style-hover="background:#41382e">{{ t.loc_search_btn }}</button>
+      </div>
+      <button onClick="{{ onGps }}" style="width:100%;padding:9px;border:1px dashed #ccc1b2;border-radius:10px;background:none;color:#7a7164;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;margin-bottom:6px" style-hover="border-color:#e67e22;color:#c85e10">{{ t.loc_gps }}</button>
+      <sc-if value="{{ locMsg }}" hint-placeholder-val="">
+        <div style="{{ locMsgStyle }}">{{ locMsg }}</div>
+      </sc-if>
 
-    <div class="form-group">
-        <label for="workload" data-i18n="workload_label">Type fysieke werkbelasting:</label>
-        <select id="workload">
-            <option value="29" data-i18n="workload_light">Licht werk (bijv. administratie, computerwerk) - limiet: 29</option>
-            <option value="26" data-i18n="workload_moderate">Middelzwaar werk (bijv. machinaal hanteren, chauffeur) - limiet: 26</option>
-            <option value="22" data-i18n="workload_heavy">Zwaar werk (bijv. timmer- of bouwwerken, tuinbouw) - limiet: 22</option>
-            <option value="18" data-i18n="workload_very_heavy">Zeer zwaar werk (bijv. intensief graven, snel hardlopen) - limiet: 18</option>
+      <div style="height:1px;background:#f0ebe3;margin:16px 0"></div>
+
+      <!-- inputs -->
+      <div style="display:flex;gap:12px;margin-bottom:14px">
+        <div style="flex:1">
+          <label style="display:block;font-size:12.5px;font-weight:600;color:#6f665b;margin-bottom:6px">{{ t.temp_label }}</label>
+          <input type="number" value="{{ temp }}" onInput="{{ onTemp }}" placeholder="30" style="width:100%;padding:11px 13px;border:1px solid #ddd3c6;border-radius:10px;font-size:16px;font-family:'IBM Plex Mono',monospace;background:#faf7f2" style-focus="border-color:#e67e22;outline:none;background:#fff">
+        </div>
+        <div style="flex:1">
+          <label style="display:block;font-size:12.5px;font-weight:600;color:#6f665b;margin-bottom:6px">{{ t.humidity_label }}</label>
+          <input type="number" value="{{ humidity }}" onInput="{{ onHumidity }}" placeholder="55" style="width:100%;padding:11px 13px;border:1px solid #ddd3c6;border-radius:10px;font-size:16px;font-family:'IBM Plex Mono',monospace;background:#faf7f2" style-focus="border-color:#e67e22;outline:none;background:#fff">
+        </div>
+      </div>
+      <div style="margin-bottom:18px">
+        <label style="display:block;font-size:12.5px;font-weight:600;color:#6f665b;margin-bottom:6px">{{ t.workload_label }}</label>
+        <select value="{{ workloadKey }}" onChange="{{ onWorkload }}" style="width:100%;padding:11px 13px;border:1px solid #ddd3c6;border-radius:10px;font-size:15px;font-family:inherit;background:#faf7f2;cursor:pointer" style-focus="border-color:#e67e22;outline:none">
+          <sc-for list="{{ workloadOptions }}" as="opt" hint-placeholder-count="4">
+            <option value="{{ opt.value }}">{{ opt.label }}</option>
+          </sc-for>
         </select>
+      </div>
+
+      <button onClick="{{ onCheck }}" style="width:100%;padding:14px;border:none;border-radius:11px;background:#e67e22;color:#fff;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 4px 14px rgba(230,126,34,.32)" style-hover="background:#d35400" style-active="transform:translateY(1px)">{{ t.button }}</button>
+
+      <!-- ===== RESULT ===== -->
+      <sc-if value="{{ result }}" hint-placeholder-val="">
+        <div style="margin-top:24px">
+
+          <div style="display:flex;align-items:center;gap:9px;padding:10px 14px;border-radius:11px;font-weight:600;font-size:14.5px;margin-bottom:18px;background:{{ status.bg }};color:{{ status.fg }}">
+            <span style="width:11px;height:11px;border-radius:50%;background:{{ status.dot }};flex:none;animation:{{ status.anim }}"></span>
+            <span>{{ status.label }}</span>
+          </div>
+
+          <!-- gauge -->
+          <div style="position:relative;width:300px;max-width:100%;margin:0 auto 4px">
+            {{ gaugeSvg }}
+            <div style="position:absolute;left:0;right:0;top:46%;text-align:center;pointer-events:none">
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:46px;font-weight:600;line-height:1;color:{{ status.dot }}">{{ result.wbgt }}</div>
+              <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#8a8175;margin-top:4px">{{ t.index_label }}</div>
+              <div style="font-size:12.5px;font-weight:600;color:{{ status.fg }};margin-top:6px">{{ marginText }}</div>
+            </div>
+          </div>
+
+          <div style="display:flex;justify-content:center;gap:22px;font-size:12px;color:#8a8175;margin-bottom:18px">
+            <span><strong style="color:#2b2520;font-family:'IBM Plex Mono',monospace">{{ result.limit }}</strong> {{ t.limit_label }}</span>
+          </div>
+
+          <!-- legal / safe -->
+          <sc-if value="{{ exceeded }}" hint-placeholder-val="">
+            <div style="background:#fbe9e9;border:1px solid #f3cccc;border-radius:13px;padding:16px 18px;margin-bottom:14px">
+              <div style="font-weight:700;font-size:14px;color:#a52a2a;margin-bottom:10px">{{ t.danger_heading }}</div>
+              <div style="display:flex;flex-direction:column;gap:9px">
+                <div style="display:flex;gap:9px;font-size:13.5px;line-height:1.45;color:#5a3a3a"><span style="color:#d64545;font-weight:700;flex:none">1</span><span>{{ t.danger_1 }}</span></div>
+                <div style="display:flex;gap:9px;font-size:13.5px;line-height:1.45;color:#5a3a3a"><span style="color:#d64545;font-weight:700;flex:none">2</span><span>{{ t.danger_2 }}</span></div>
+                <div style="display:flex;gap:9px;font-size:13.5px;line-height:1.45;color:#5a3a3a"><span style="color:#d64545;font-weight:700;flex:none">3</span><span>{{ t.danger_3 }}</span></div>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ notExceeded }}" hint-placeholder-val="">
+            <div style="background:#e9f4ee;border:1px solid #cfe6da;border-radius:13px;padding:14px 18px;margin-bottom:14px;font-size:13.5px;line-height:1.5;color:#2f5f47">{{ t.safe_text }}</div>
+          </sc-if>
+
+          <!-- work/rest advisory -->
+          <div style="display:flex;align-items:center;gap:14px;background:#faf7f2;border:1px solid #ece5db;border-radius:13px;padding:14px 16px">
+            <div style="flex:none;width:46px;height:46px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;color:#fff;background:{{ workRest.color }};text-align:center;line-height:1.1">{{ workRest.badge }}</div>
+            <div>
+              <div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#a89f93;margin-bottom:3px">{{ t.workrest_title }}</div>
+              <div style="font-size:14px;font-weight:600;color:#2b2520">{{ workRest.text }}</div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
     </div>
 
-    <div class="row">
-        <button id="checkBtn" onclick="calculateMetrics()" data-i18n="button">Controleer Status</button>
-        <button id="locationBtn" onclick="getLocationAndWeather()" data-i18n="use_location">Gebruik mijn locatie</button>
+    </div><!-- /leftcol -->
+    <div class="rightcol">
+
+    <!-- ===== FORECAST ===== -->
+    <sc-if value="{{ showForecast }}" hint-placeholder-val="">
+      <div style="background:#fff;border:1px solid #ece5db;border-radius:18px;padding:22px;box-shadow:0 10px 30px rgba(80,60,30,.06)">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:4px">
+          <div style="font-weight:700;font-size:16px;white-space:nowrap;flex:none">{{ t.forecast_title }}</div>
+          <div style="font-size:11.5px;color:#a89f93;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0">{{ fcLocation }}</div>
+        </div>
+        <div style="font-size:13px;font-weight:600;color:{{ fcSummary.color }};margin-bottom:16px">{{ fcSummary.text }}</div>
+
+        <div style="position:relative;height:148px;display:flex;align-items:flex-end;gap:2px;padding-top:4px">
+          <div style="position:absolute;left:0;right:0;bottom:{{ limitPct }}%;height:0;border-top:2px dashed #d64545;z-index:2"></div>
+          <div style="position:absolute;right:0;bottom:{{ limitPct }}%;transform:translateY(-50%);font-size:10px;font-weight:600;color:#d64545;background:#fff;padding:0 4px;z-index:3">{{ limitLabel }}</div>
+          <sc-for list="{{ bars }}" as="bar" hint-placeholder-count="24">
+            <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;height:100%;position:relative">
+              <div style="height:{{ bar.pct }}%;background:{{ bar.color }};border-radius:3px 3px 0 0;opacity:{{ bar.opacity }};outline:{{ bar.ring }}"></div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;gap:2px;margin-top:6px">
+          <sc-for list="{{ bars }}" as="bar" hint-placeholder-count="24">
+            <div style="flex:1;text-align:center;font-size:9px;font-family:'IBM Plex Mono',monospace;color:#b3a99c">{{ bar.tick }}</div>
+          </sc-for>
+        </div>
+
+        <div style="display:flex;gap:16px;margin-top:16px;flex-wrap:wrap">
+          <div style="display:flex;align-items:center;gap:6px;font-size:11.5px;color:#7a7164"><span style="width:10px;height:10px;border-radius:3px;background:#3a9d6b"></span>{{ t.legend_safe }}</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:11.5px;color:#7a7164"><span style="width:10px;height:10px;border-radius:3px;background:#e8a13a"></span>{{ t.legend_caution }}</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:11.5px;color:#7a7164"><span style="width:10px;height:10px;border-radius:3px;background:#d64545"></span>{{ t.legend_danger }}</div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ===== RECENT ===== -->
+    <sc-if value="{{ showRecent }}" hint-placeholder-val="">
+      <div style="background:#fff;border:1px solid #ece5db;border-radius:18px;padding:20px 22px;box-shadow:0 10px 30px rgba(80,60,30,.06)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <div style="font-weight:700;font-size:15px">{{ t.recent_title }}</div>
+          <button onClick="{{ onClearRecent }}" style="border:none;background:none;color:#b3a99c;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit" style-hover="color:#d64545">{{ t.recent_clear }}</button>
+        </div>
+        <sc-for list="{{ recent }}" as="r" hint-placeholder-count="3">
+          <div style="display:flex;align-items:center;gap:12px;padding:9px 0;border-top:1px solid #f3efe9">
+            <span style="width:9px;height:9px;border-radius:50%;background:{{ r.dot }};flex:none"></span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;color:#2b2520;min-width:46px">{{ r.wbgt }}</span>
+            <span style="font-size:12.5px;color:#8a8175;flex:1">{{ r.cond }}</span>
+            <span style="font-size:12px;color:#b3a99c;font-family:'IBM Plex Mono',monospace">{{ r.time }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <!-- ===== ADSENSE ===== -->
+    <div style="background:#fff;border:1px solid #ece5db;border-radius:18px;padding:14px;box-shadow:0 10px 30px rgba(80,60,30,.06);min-height:120px;display:flex;align-items:center;justify-content:center;overflow:hidden">
+      <ins class="adsbygoogle" style="display:block;width:100%" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX" data-ad-format="auto" data-full-width-responsive="true"></ins>
     </div>
 
-    <div id="result" class="result-box">
-        <h3 id="status-title"></h3>
-        <p><span data-i18n="wbgt_label">Berekende WBGT-index:</span> <strong id="wbgt-val">0</strong></p>
-        <p><span data-i18n="limit_label">Wettelijke limiet voor dit werk:</span> <strong id="limit-val">0</strong></p>
-        <div id="legal-actions"></div>
-    </div>
+    </div><!-- /rightcol -->
+    </div><!-- /layout -->
 
-    <div class="disclaimer" data-i18n="disclaimer">
-        * <strong>Belangrijke beperking:</strong> Deze tool schat de WBGT-index op basis van de tabel op p. 17 van de FOD-brochure. Dit is geldig in afwezigheid van directe zonnestraling of stralingswarmte van machines. Indien er wél stralingswarmte aanwezig is, dient er een fysieke meting met een zwarte-bolthermometer te gebeuren.
-    </div>
+    <!-- disclaimer -->
+    <p style="font-size:11px;line-height:1.55;color:#a89f93;margin:18px 4px 0"><strong style="color:#8a8175">{{ t.disclaimer_lead }}</strong> {{ t.disclaimer }}</p>
+    <p style="font-size:10.5px;color:#bcb2a4;margin:8px 4px 0">{{ t.source }}</p>
+
+  </div>
 </div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:600,&quot;height&quot;:900},&quot;defaultLang&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;nl&quot;,&quot;en&quot;,&quot;fr&quot;],&quot;default&quot;:&quot;nl&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;showForecast&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;showRecentChecks&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = {
+    lang: 'nl',
+    temp: '',
+    humidity: '',
+    workloadKey: 'light',
+    query: '',
+    result: null,
+    forecast: null,
+    nowHour: new Date().getHours(),
+    fcLocation: '',
+    locMsg: '',
+    locType: '',
+    recent: []
+  };
 
-<div class="ad-container">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-         data-ad-slot="XXXXXXXXXX"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-</div>
+  limits = { light: 29, moderate: 26, heavy: 22, very_heavy: 18 };
 
-<script>
-const translations = {
+  translations = {
     nl: {
-        title: "Wettelijke Hitte-op-het-Werk Calculator (België)",
-        heading: "Hitte op het Werk Check",
-        desc: "Bereken conform de Belgische Welzijnswetgeving of actiewaarden zijn overschreden.",
-        temp_label: "Luchttemperatuur (°C):",
-        temp_placeholder: "Bijv. 30",
-        humidity_label: "Relatieve Luchtvochtigheid (%):",
-        humidity_placeholder: "Bijv. 55",
-        workload_label: "Type fysieke werkbelasting:",
-        workload_light: "Licht werk (bijv. administratie, computerwerk) - limiet: 29",
-        workload_moderate: "Middelzwaar werk (bijv. machinaal hanteren, chauffeur) - limiet: 26",
-        workload_heavy: "Zwaar werk (bijv. timmer- of bouwwerken, tuinbouw) - limiet: 22",
-        workload_very_heavy: "Zeer zwaar werk (bijv. intensief graven, snel hardlopen) - limiet: 18",
-        button: "Controleer Status",
-        status_title_danger: "⚠️ Actiewaarde Overschreden!",
-        status_title_safe: "🟢 Veilige Werkzone",
-        wbgt_label: "Berekende WBGT-index:",
-        limit_label: "Wettelijke limiet voor dit werk:",
-        wbgt_unit: "WBGT",
-        danger_heading: "Wettelijk verplichte maatregelen voor de werkgever:",
-        danger_1: "Stel gratis geschikte, verfrissende dranken ter beschikking.",
-        danger_2: "Voorzie binnen de 48 uur kunstmatige ventilatie (conform de richtlijnen voor luchtverversing).",
-        danger_3: "Indien de overschrijding aanhoudt: voer een regime in van beperkte aanwezigheid op de werkpost en voorzie verplichte rusttijden (pauzes in een koele ruimte).",
-        safe_text: "De berekende warmte-index ligt binnen de wettelijk toegestane grenzen voor dit type werkbelasting. Blijf de situatie monitoren bij stijgende temperaturen.",
-        disclaimer: "* <strong>Belangrijke beperking:</strong> Deze tool schat de WBGT-index op basis van de tabel op p. 17 van de FOD-brochure. Dit is geldig in afwezigheid van directe zonnestraling of stralingswarmte van machines. Indien er wél stralingswarmte aanwezig is, dient er een fysieke meting met een zwarte-bolthermometer te gebeuren.",
-        alert: "Vul aub geldige waarden in voor temperatuur en luchtvochtigheid.",
-        use_location: "Gebruik mijn locatie",
-        location_loading: "Locatie ophalen...",
-        location_error: "Kon locatie of weerdata niet ophalen."
+      heading: "Hitte op het Werk", desc: "Bereken conform de Belgische Welzijnswetgeving of de wettelijke actiewaarden voor warmte zijn overschreden.",
+      temp_label: "Luchttemp. (°C)", humidity_label: "Vochtigheid (%)", workload_label: "Type fysieke werkbelasting",
+      workload_light: "Licht werk (bijv. administratie, computerwerk) - limiet: 29", workload_moderate: "Middelzwaar werk (bijv. machinaal hanteren, chauffeur) - limiet: 26", workload_heavy: "Zwaar werk (bijv. timmer- of bouwwerken, tuinbouw) - limiet: 22", workload_very_heavy: "Zeer zwaar werk (bijv. intensief graven, snel hardlopen) - limiet: 18",
+      button: "Controleer status", index_label: "WBGT-index", limit_label: "wettelijke limiet",
+      status_danger: "⚠️ Actiewaarde overschreden", status_caution: "🟠 Opgelet — dicht bij de limiet", status_safe: "🟢 Veilige werkzone",
+      exceed_by: "{n}° boven de limiet", margin_below: "{n}° onder de limiet",
+      danger_heading: "Wettelijk verplichte maatregelen voor de werkgever:",
+      danger_1: "Stel gratis geschikte, verfrissende dranken ter beschikking.",
+      danger_2: "Voorzie binnen de 48 uur kunstmatige ventilatie (conform de richtlijnen voor luchtverversing).",
+      danger_3: "Bij aanhoudende overschrijding: voer een regime in van beperkte aanwezigheid op de werkpost en voorzie verplichte rusttijden in een koele ruimte.",
+      safe_text: "De berekende warmte-index ligt binnen de wettelijk toegestane grenzen voor dit type werkbelasting. Blijf de situatie monitoren bij stijgende temperaturen.",
+      workrest_title: "Aanbevolen werk-rustverhouding (advies)",
+      wr_normal: "Normale werkregeling — geen aangepast ritme nodig.", wr_plan_early: "Plan zwaar werk vroeg op de dag of laat in de namiddag.",
+      wr_75: "± 75% werken / 25% rusten per uur.", wr_50: "± 50% werken / 50% rusten per uur.", wr_25: "± 25% werken / 75% rusten per uur.", wr_stop: "Staak zwaar werk; enkel essentiële taken in de koelte.",
+      forecast_title: "Hitteverloop vandaag", forecast_no_danger: "Vandaag wordt de limiet niet overschreden.", forecast_danger_from: "Limiet overschreden vanaf {h} — plan zwaar werk vooraf.", forecast_danger_now: "Limiet nu overschreden — pas het werkritme aan.", forecast_safe_again: "Limiet overschreden tot {h}.",
+      legend_safe: "Veilig", legend_caution: "Opgelet", legend_danger: "Overschreden", limit_short: "limiet",
+      loc_search_ph: "Zoek gemeente of stad…", loc_search_btn: "Zoek", loc_gps: "📍 Gebruik mijn huidige locatie",
+      loc_searching: "Zoeken…", loc_loading: "Weergegevens ophalen…", loc_notfound: "Locatie niet gevonden. Probeer een andere naam.", loc_error: "Kon de weergegevens niet ophalen.", loc_ok: "Weer geladen voor {p}",
+      recent_title: "Recente controles", recent_clear: "Wissen",
+      disclaimer_lead: "Belangrijke beperking:", disclaimer: "Deze tool schat de WBGT-index op basis van de tabel op p. 17 van de FOD-brochure, geldig in afwezigheid van directe zonnestraling of stralingswarmte van machines. Bij stralingswarmte is een fysieke meting met een zwarte-bolthermometer vereist.",
+      source: "Weerdata: Open-Meteo · Werk-rustverhouding is een algemeen advies, geen wettelijke verplichting.",
+      alert: "Vul geldige waarden in voor temperatuur en luchtvochtigheid."
     },
     en: {
-        title: "Legal Heat-at-Work Calculator (Belgium)",
-        heading: "Heat at Work Check",
-        desc: "Calculate whether action values are exceeded in accordance with Belgian Welfare Legislation.",
-        temp_label: "Air Temperature (°C):",
-        temp_placeholder: "E.g. 30",
-        humidity_label: "Relative Humidity (%):",
-        humidity_placeholder: "E.g. 55",
-        workload_label: "Type of physical workload:",
-        workload_light: "Light work (e.g. office, computer work) - limit: 29",
-        workload_moderate: "Moderate work (e.g. machine handling, driver) - limit: 26",
-        workload_heavy: "Heavy work (e.g. carpentry, construction, horticulture) - limit: 22",
-        workload_very_heavy: "Very heavy work (e.g. intensive digging, fast running) - limit: 18",
-        button: "Check Status",
-        status_title_danger: "⚠️ Action Value Exceeded!",
-        status_title_safe: "🟢 Safe Work Zone",
-        wbgt_label: "Calculated WBGT index:",
-        limit_label: "Legal limit for this work:",
-        wbgt_unit: "WBGT",
-        danger_heading: "Legally required measures for the employer:",
-        danger_1: "Provide free, suitable refreshing drinks.",
-        danger_2: "Provide artificial ventilation within 48 hours (in accordance with air exchange guidelines).",
-        danger_3: "If the exceedance persists: implement a regime of limited presence at the workstation and provide mandatory rest periods (breaks in a cool room).",
-        safe_text: "The calculated heat index is within the legally permitted limits for this type of workload. Continue monitoring the situation if temperatures rise.",
-        disclaimer: "* <strong>Important limitation:</strong> This tool estimates the WBGT index based on the table on p. 17 of the FPS brochure. This is valid in the absence of direct solar radiation or radiant heat from machinery. If radiant heat is present, a physical measurement with a black globe thermometer must be performed.",
-        alert: "Please enter valid values for temperature and humidity.",
-        use_location: "Use my location",
-        location_loading: "Getting location...",
-        location_error: "Could not retrieve location or weather data."
+      heading: "Heat at Work", desc: "Calculate whether the legal heat action values are exceeded under Belgian Welfare Legislation.",
+      temp_label: "Air temp. (°C)", humidity_label: "Humidity (%)", workload_label: "Type of physical workload",
+      workload_light: "Light work (e.g. office, computer work) - limit: 29", workload_moderate: "Moderate work (e.g. machine handling, driver) - limit: 26", workload_heavy: "Heavy work (e.g. carpentry, construction, horticulture) - limit: 22", workload_very_heavy: "Very heavy work (e.g. intensive digging, fast running) - limit: 18",
+      button: "Check status", index_label: "WBGT index", limit_label: "legal limit",
+      status_danger: "⚠️ Action value exceeded", status_caution: "🟠 Caution — near the limit", status_safe: "🟢 Safe work zone",
+      exceed_by: "{n}° above the limit", margin_below: "{n}° below the limit",
+      danger_heading: "Legally required measures for the employer:",
+      danger_1: "Provide free, suitable refreshing drinks.",
+      danger_2: "Provide artificial ventilation within 48 hours (per air-exchange guidelines).",
+      danger_3: "If the exceedance persists: implement limited presence at the workstation and provide mandatory rest periods in a cool room.",
+      safe_text: "The calculated heat index is within the legally permitted limits for this type of workload. Keep monitoring as temperatures rise.",
+      workrest_title: "Recommended work-rest ratio (advisory)",
+      wr_normal: "Normal work schedule — no adjusted pace needed.", wr_plan_early: "Schedule heavy work early in the day or late afternoon.",
+      wr_75: "≈ 75% work / 25% rest per hour.", wr_50: "≈ 50% work / 50% rest per hour.", wr_25: "≈ 25% work / 75% rest per hour.", wr_stop: "Stop heavy work; essential tasks only, in the cool.",
+      forecast_title: "Heat trend today", forecast_no_danger: "The limit is not exceeded today.", forecast_danger_from: "Limit exceeded from {h} — plan heavy work before then.", forecast_danger_now: "Limit exceeded now — adjust the work pace.", forecast_safe_again: "Limit exceeded until {h}.",
+      legend_safe: "Safe", legend_caution: "Caution", legend_danger: "Exceeded", limit_short: "limit",
+      loc_search_ph: "Search town or city…", loc_search_btn: "Search", loc_gps: "📍 Use my current location",
+      loc_searching: "Searching…", loc_loading: "Fetching weather…", loc_notfound: "Location not found. Try another name.", loc_error: "Could not fetch weather data.", loc_ok: "Weather loaded for {p}",
+      recent_title: "Recent checks", recent_clear: "Clear",
+      disclaimer_lead: "Important limitation:", disclaimer: "This tool estimates the WBGT index from the table on p. 17 of the FPS brochure, valid in the absence of direct solar radiation or radiant heat from machinery. If radiant heat is present, a physical measurement with a black-globe thermometer is required.",
+      source: "Weather data: Open-Meteo · The work-rest ratio is general guidance, not a legal obligation.",
+      alert: "Please enter valid values for temperature and humidity."
     },
     fr: {
-        title: "Calculateur Légal de Chaleur au Travail (Belgique)",
-        heading: "Contrôle Chaleur au Travail",
-        desc: "Calculez si les valeurs d'action sont dépassées conformément à la Législation belge sur le bien-être.",
-        temp_label: "Température de l'air (°C):",
-        temp_placeholder: "P. ex. 30",
-        humidity_label: "Humidité Relative (%):",
-        humidity_placeholder: "P. ex. 55",
-        workload_label: "Type de charge de travail physique:",
-        workload_light: "Travail léger (p. ex. administratif, ordinateur) - limite: 29",
-        workload_moderate: "Travail moyen (p. ex. manipulation mécanique, chauffeur) - limite: 26",
-        workload_heavy: "Travail lourd (p. ex. menuiserie, construction, horticulture) - limite: 22",
-        workload_very_heavy: "Travail très lourd (p. ex. creusement intensif, course rapide) - limite: 18",
-        button: "Vérifier le Statut",
-        status_title_danger: "⚠️ Valeur d'Action Dépassée!",
-        status_title_safe: "🟢 Zone de Travail Sûre",
-        wbgt_label: "Indice WBGT calculé:",
-        limit_label: "Limite légale pour ce travail:",
-        wbgt_unit: "WBGT",
-        danger_heading: "Mesures légalement obligatoires pour l'employeur:",
-        danger_1: "Mettre à disposition des boissons rafraîchissantes gratuites et appropriées.",
-        danger_2: "Assurer une ventilation artificielle dans les 48 heures (conformément aux directives de renouvellement d'air).",
-        danger_3: "Si le dépassement persiste : instaurer un régime de présence limitée au poste de travail et prévoir des temps de repos obligatoires (pauses dans un local frais).",
-        safe_text: "L'indice de chaleur calculé se situe dans les limites légalement autorisées pour ce type de charge de travail. Continuez à surveiller la situation si les températures augmentent.",
-        disclaimer: "* <strong>Limitation importante :</strong> Cet outil estime l'indice WBGT sur base du tableau à la p. 17 de la brochure du SPF. Ceci est valable en l'absence de rayonnement solaire direct ou de chaleur radiante provenant de machines. En présence de chaleur radiante, une mesure physique avec un thermomètre à globe noir doit être effectuée.",
-        alert: "Veuillez entrer des valeurs valides pour la température et l'humidité.",
-        use_location: "Utiliser ma position",
-        location_loading: "Obtention de la position...",
-        location_error: "Impossible d'obtenir la position ou les données météo."
+      heading: "Chaleur au Travail", desc: "Calculez si les valeurs d'action légales pour la chaleur sont dépassées selon la législation belge sur le bien-être.",
+      temp_label: "Temp. air (°C)", humidity_label: "Humidité (%)", workload_label: "Type de charge de travail physique",
+      workload_light: "Travail léger (p. ex. administratif, ordinateur) - limite: 29", workload_moderate: "Travail moyen (p. ex. manipulation mécanique, chauffeur) - limite: 26", workload_heavy: "Travail lourd (p. ex. menuiserie, construction, horticulture) - limite: 22", workload_very_heavy: "Travail très lourd (p. ex. creusement intensif, course rapide) - limite: 18",
+      button: "Vérifier le statut", index_label: "Indice WBGT", limit_label: "limite légale",
+      status_danger: "⚠️ Valeur d'action dépassée", status_caution: "🟠 Attention — proche de la limite", status_safe: "🟢 Zone de travail sûre",
+      exceed_by: "{n}° au-dessus de la limite", margin_below: "{n}° en dessous de la limite",
+      danger_heading: "Mesures légalement obligatoires pour l'employeur :",
+      danger_1: "Mettre à disposition des boissons rafraîchissantes gratuites et appropriées.",
+      danger_2: "Assurer une ventilation artificielle dans les 48 heures (selon les directives de renouvellement d'air).",
+      danger_3: "Si le dépassement persiste : instaurer une présence limitée au poste et prévoir des temps de repos obligatoires dans un local frais.",
+      safe_text: "L'indice de chaleur calculé se situe dans les limites légalement autorisées pour ce type de charge. Continuez à surveiller si les températures augmentent.",
+      workrest_title: "Ratio travail-repos recommandé (avis)",
+      wr_normal: "Régime de travail normal — aucun rythme adapté nécessaire.", wr_plan_early: "Planifiez le travail lourd tôt le matin ou en fin d'après-midi.",
+      wr_75: "≈ 75% travail / 25% repos par heure.", wr_50: "≈ 50% travail / 50% repos par heure.", wr_25: "≈ 25% travail / 75% repos par heure.", wr_stop: "Cessez le travail lourd ; tâches essentielles uniquement, au frais.",
+      forecast_title: "Évolution de la chaleur aujourd'hui", forecast_no_danger: "La limite n'est pas dépassée aujourd'hui.", forecast_danger_from: "Limite dépassée à partir de {h} — planifiez le travail lourd avant.", forecast_danger_now: "Limite dépassée maintenant — adaptez le rythme.", forecast_safe_again: "Limite dépassée jusqu'à {h}.",
+      legend_safe: "Sûr", legend_caution: "Attention", legend_danger: "Dépassée", limit_short: "limite",
+      loc_search_ph: "Rechercher une commune…", loc_search_btn: "Chercher", loc_gps: "📍 Utiliser ma position actuelle",
+      loc_searching: "Recherche…", loc_loading: "Récupération météo…", loc_notfound: "Localité introuvable. Essayez un autre nom.", loc_error: "Impossible de récupérer la météo.", loc_ok: "Météo chargée pour {p}",
+      recent_title: "Contrôles récents", recent_clear: "Effacer",
+      disclaimer_lead: "Limitation importante :", disclaimer: "Cet outil estime l'indice WBGT à partir du tableau p. 17 de la brochure du SPF, valable en l'absence de rayonnement solaire direct ou de chaleur radiante des machines. En présence de chaleur radiante, une mesure physique au thermomètre à globe noir est requise.",
+      source: "Données météo : Open-Meteo · Le ratio travail-repos est un avis général, pas une obligation légale.",
+      alert: "Veuillez entrer des valeurs valides pour la température et l'humidité."
     }
-};
+  };
 
-let currentLang = 'nl';
+  componentDidMount() {
+    const dl = this.props.defaultLang;
+    if (dl && this.translations[dl] && dl !== this.state.lang) this.setState({ lang: dl });
+    try {
+      const raw = localStorage.getItem('wbgt.recentChecks');
+      if (raw) this.setState({ recent: JSON.parse(raw) });
+    } catch (e) {}
+    try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) {}
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("sw.js");
+    }
+  }
 
-function translatePage(lang) {
-    document.querySelectorAll("[data-i18n]").forEach(el => {
-        const key = el.dataset.i18n;
-        if (translations[lang][key]) {
-            el.innerHTML = translations[lang][key];
-        }
-    });
-    document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
-        const key = el.dataset.i18nPlaceholder;
-        if (translations[lang][key]) {
-            el.placeholder = translations[lang][key];
-        }
-    });
-    document.title = translations[lang].title;
-    document.documentElement.lang = lang;
+  wbgt(ta, rh) {
+    const twb = ta * Math.atan(0.151977 * Math.sqrt(rh + 8.313659))
+      + Math.atan(ta + rh) - Math.atan(rh - 1.676331)
+      + 0.00391838 * Math.pow(rh, 1.5) * Math.atan(0.023101 * rh) - 4.686035;
+    return Math.round((0.7 * twb + 0.3 * ta) * 10) / 10;
+  }
+
+  pad(h) { return (h < 10 ? '0' : '') + h + ':00'; }
+
+  setLang(code) { this.setState({ lang: code }); }
+
+  calculate(save) {
+    const ta = parseFloat(this.state.temp);
+    const rh = parseFloat(this.state.humidity);
+    const limit = this.limits[this.state.workloadKey];
+    if (isNaN(ta) || isNaN(rh)) { alert(this.translations[this.state.lang].alert); return; }
+    const w = this.wbgt(ta, rh);
+    this.setState({ result: { ta, rh, wbgt: w, limit } });
+    if (save) this.saveRecent({ ta, rh, wbgt: w, limit });
+  }
+
+  saveRecent(r) {
+    const d = new Date();
+    const entry = {
+      wbgt: r.wbgt.toFixed(1), limit: r.limit, exceeded: r.wbgt >= r.limit,
+      ta: r.ta, rh: r.rh,
+      time: (d.getHours() < 10 ? '0' : '') + d.getHours() + ':' + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes()
+    };
+    const arr = [entry, ...this.state.recent].slice(0, 5);
+    try { localStorage.setItem('wbgt.recentChecks', JSON.stringify(arr)); } catch (e) {}
+    this.setState({ recent: arr });
+  }
+
+  onWorkloadChange(e) {
+    this.setState({ workloadKey: e.target.value }, () => { if (this.state.result) this.calculate(false); });
+  }
+
+  async onSearch() {
+    const q = this.state.query.trim();
+    if (!q) return;
+    const t = this.translations[this.state.lang];
+    this.setState({ locMsg: t.loc_searching, locType: 'info' });
+    try {
+      const geo = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&count=1&language=${this.state.lang}`).then(r => r.json());
+      if (!geo.results || !geo.results.length) { this.setState({ locMsg: t.loc_notfound, locType: 'error' }); return; }
+      const g = geo.results[0];
+      const label = g.name + (g.admin1 ? ', ' + g.admin1 : '') + (g.country_code ? ' (' + g.country_code + ')' : '');
+      await this.loadWeather(g.latitude, g.longitude, label);
+    } catch (e) { this.setState({ locMsg: t.loc_error, locType: 'error' }); }
+  }
+
+  onGps() {
+    const t = this.translations[this.state.lang];
+    if (!navigator.geolocation) { this.setState({ locMsg: t.loc_error, locType: 'error' }); return; }
+    this.setState({ locMsg: t.loc_searching, locType: 'info' });
+    navigator.geolocation.getCurrentPosition(
+      p => this.loadWeather(p.coords.latitude, p.coords.longitude, '📍 ' + p.coords.latitude.toFixed(2) + ', ' + p.coords.longitude.toFixed(2)),
+      err => this.setState({ locMsg: t.loc_error + ' (' + err.code + ': ' + err.message + ')', locType: 'error' }),
+      { enableHighAccuracy: false, timeout: 20000, maximumAge: 600000 }
+    );
+  }
+
+  async loadWeather(lat, lon, label) {
+    const t = this.translations[this.state.lang];
+    this.setState({ locMsg: t.loc_loading, locType: 'info' });
+    try {
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m&hourly=temperature_2m,relative_humidity_2m&timezone=auto&forecast_days=1`;
+      const d = await fetch(url).then(r => r.json());
+      const fc = d.hourly.time.map((iso, i) => ({
+        hour: new Date(iso).getHours(),
+        temp: d.hourly.temperature_2m[i],
+        rh: d.hourly.relative_humidity_2m[i],
+        wbgt: this.wbgt(d.hourly.temperature_2m[i], d.hourly.relative_humidity_2m[i])
+      }));
+      const ct = d.current.temperature_2m, ch = d.current.relative_humidity_2m;
+      this.setState({
+        temp: String(ct), humidity: String(ch),
+        forecast: fc, fcLocation: label, nowHour: new Date(d.current.time).getHours(),
+        locMsg: t.loc_ok.replace('{p}', label), locType: 'ok'
+      }, () => this.calculate(true));
+    } catch (e) { this.setState({ locMsg: t.loc_error, locType: 'error' }); }
+  }
+
+  buildGauge(wbgt, limit) {
+    const min = 12, max = 34, cx = 150, cy = 150, r = 118, sw = 22;
+    const ang = v => Math.PI * (1 - (Math.min(max, Math.max(min, v)) - min) / (max - min));
+    const pt = a => [cx + r * Math.cos(a), cy - r * Math.sin(a)];
+    const arc = (v1, v2, color, cap) => {
+      const a1 = ang(v1), a2 = ang(v2);
+      const p1 = pt(a1), p2 = pt(a2);
+      const large = Math.abs(a1 - a2) > Math.PI ? 1 : 0;
+      return React.createElement('path', {
+        key: color + v1, d: `M ${p1[0]} ${p1[1]} A ${r} ${r} 0 ${large} 1 ${p2[0]} ${p2[1]}`,
+        stroke: color, strokeWidth: sw, fill: 'none', strokeLinecap: cap || 'butt'
+      });
+    };
+    const greenEnd = Math.max(min + 0.1, limit - 2);
+    const els = [];
+    els.push(React.createElement('path', { key: 'trk', d: `M ${pt(ang(min))[0]} ${pt(ang(min))[1]} A ${r} ${r} 0 1 1 ${pt(ang(max))[0]} ${pt(ang(max))[1]}`, stroke: '#efe9e0', strokeWidth: sw, fill: 'none', strokeLinecap: 'round' }));
+    els.push(arc(min, greenEnd, '#3a9d6b', 'round'));
+    els.push(arc(greenEnd, limit, '#e8a13a'));
+    els.push(arc(limit, max, '#d64545', 'round'));
+    const am = ang(wbgt), mp = pt(am);
+    els.push(React.createElement('circle', { key: 'mk', cx: mp[0], cy: mp[1], r: 13, fill: '#fff', stroke: '#2b2520', strokeWidth: 4 }));
+    els.push(React.createElement('text', { key: 'mn', x: pt(ang(min))[0], y: cy + 22, fontSize: 12, fill: '#b3a99c', textAnchor: 'middle', fontFamily: 'IBM Plex Mono, monospace' }, String(min)));
+    els.push(React.createElement('text', { key: 'mx', x: pt(ang(max))[0], y: cy + 22, fontSize: 12, fill: '#b3a99c', textAnchor: 'middle', fontFamily: 'IBM Plex Mono, monospace' }, String(max)));
+    return React.createElement('svg', { viewBox: '0 0 300 180', style: { width: '100%', display: 'block', overflow: 'visible' } }, els);
+  }
+
+  guidance(wbgt, limit, t) {
+    const d = wbgt - limit;
+    if (d >= 5) return { text: t.wr_stop, badge: 'STOP', color: '#b02525' };
+    if (d >= 3) return { text: t.wr_25, badge: '25/75', color: '#d64545' };
+    if (d >= 1) return { text: t.wr_50, badge: '50/50', color: '#e8732a' };
+    if (d >= 0) return { text: t.wr_75, badge: '75/25', color: '#e8a13a' };
+    if (d >= -1.5) return { text: t.wr_plan_early, badge: '~', color: '#e8a13a' };
+    return { text: t.wr_normal, badge: 'OK', color: '#3a9d6b' };
+  }
+
+  renderVals() {
+    const lang = this.state.lang;
+    const t = this.translations[lang];
+    const limit = this.limits[this.state.workloadKey];
+
+    const pillBase = "width:auto;padding:6px 13px;font-size:12px;font-weight:600;border-radius:8px;cursor:pointer;font-family:inherit;border:1px solid #ddd3c6;background:#fff;color:#9a8f80;transition:all .15s";
+    const pillActive = "border:1px solid #2b2520;background:#2b2520;color:#fff;width:auto;padding:6px 13px;font-size:12px;font-weight:600;border-radius:8px;cursor:pointer;font-family:inherit";
+    const langs = ['nl', 'en', 'fr'].map(code => ({
+      code, label: code.toUpperCase(),
+      style: code === lang ? pillActive : pillBase,
+      onClick: () => this.setLang(code)
+    }));
+
+    const workloadOptions = ['light', 'moderate', 'heavy', 'very_heavy'].map(k => ({ value: k, label: t['workload_' + k] }));
+
+    const locStyles = {
+      info: "font-size:12.5px;color:#7a7164;background:#faf7f2;border-radius:8px;padding:8px 11px",
+      ok: "font-size:12.5px;color:#2f6e47;background:#e9f4ee;border-radius:8px;padding:8px 11px;font-weight:600",
+      error: "font-size:12.5px;color:#a52a2a;background:#fbe9e9;border-radius:8px;padding:8px 11px;font-weight:600"
+    };
+
+    let result = null, gaugeSvg = null, status = null, exceeded = false, notExceeded = false, marginText = '', workRest = null;
+    if (this.state.result) {
+      const w = this.state.result.wbgt, lim = this.state.result.limit;
+      exceeded = w >= lim;
+      notExceeded = !exceeded;
+      const diff = Math.round(Math.abs(w - lim) * 10) / 10;
+      gaugeSvg = this.buildGauge(w, lim);
+      if (exceeded) status = { label: t.status_danger, bg: '#fbe9e9', fg: '#a52a2a', dot: '#d64545', anim: 'pulse 1.6s ease-in-out infinite' };
+      else if (lim - w <= 1.5) status = { label: t.status_caution, bg: '#fdf3e3', fg: '#9a6a16', dot: '#e8a13a', anim: 'none' };
+      else status = { label: t.status_safe, bg: '#e9f4ee', fg: '#1f6e47', dot: '#3a9d6b', anim: 'none' };
+      marginText = (exceeded ? t.exceed_by : t.margin_below).replace('{n}', diff);
+      workRest = this.guidance(w, lim, t);
+      result = { wbgt: w.toFixed(1), limit: lim };
+    }
+
+    let bars = null, fcSummary = null, limitPct = null, limitLabel = '';
+    const showForecast = (this.props.showForecast ?? true) && !!this.state.forecast;
+    if (this.state.forecast) {
+      const cmin = 12, cmax = 34;
+      bars = this.state.forecast.map(f => {
+        const pct = Math.max(3, Math.min(100, ((f.wbgt - cmin) / (cmax - cmin)) * 100));
+        const danger = f.wbgt >= limit;
+        const caution = !danger && (limit - f.wbgt) <= 1.5;
+        const isNow = f.hour === this.state.nowHour;
+        return {
+          pct, color: danger ? '#d64545' : caution ? '#e8a13a' : '#3a9d6b',
+          opacity: f.hour < this.state.nowHour ? 0.32 : 1,
+          ring: isNow ? '2px solid #2b2520' : 'none',
+          tick: f.hour % 3 === 0 ? (f.hour < 10 ? '0' + f.hour : '' + f.hour) : ''
+        };
+      });
+      limitPct = Math.max(0, Math.min(100, ((limit - cmin) / (cmax - cmin)) * 100));
+      limitLabel = t.limit_short + ' ' + limit;
+      const cur = this.state.forecast.find(f => f.hour === this.state.nowHour);
+      const future = this.state.forecast.filter(f => f.hour >= this.state.nowHour);
+      const firstDanger = future.find(f => f.wbgt >= limit);
+      const anyDanger = this.state.forecast.some(f => f.wbgt >= limit);
+      if (cur && cur.wbgt >= limit) fcSummary = { text: t.forecast_danger_now, color: '#a52a2a' };
+      else if (firstDanger) fcSummary = { text: t.forecast_danger_from.replace('{h}', this.pad(firstDanger.hour)), color: '#9a6a16' };
+      else if (anyDanger) fcSummary = { text: t.forecast_no_danger, color: '#2f6e47' };
+      else fcSummary = { text: t.forecast_no_danger, color: '#2f6e47' };
+    }
+
+    const recent = this.state.recent.map(r => ({
+      wbgt: r.wbgt, time: r.time,
+      dot: r.exceeded ? '#d64545' : '#3a9d6b',
+      cond: Math.round(r.ta) + '°C · ' + Math.round(r.rh) + '% · ' + t.limit_short + ' ' + r.limit
+    }));
+
+    return {
+      t, langs, workloadOptions, workloadKey: this.state.workloadKey,
+      temp: this.state.temp, humidity: this.state.humidity, query: this.state.query,
+      onTemp: e => this.setState({ temp: e.target.value }),
+      onHumidity: e => this.setState({ humidity: e.target.value }),
+      onQuery: e => this.setState({ query: e.target.value }),
+      onQueryKey: e => { if (e.key === 'Enter') this.onSearch(); },
+      onWorkload: e => this.onWorkloadChange(e),
+      onCheck: () => this.calculate(true),
+      onSearch: () => this.onSearch(),
+      onGps: () => this.onGps(),
+      onClearRecent: () => { try { localStorage.removeItem('wbgt.recentChecks'); } catch (e) {} this.setState({ recent: [] }); },
+      locMsg: this.state.locMsg, locMsgStyle: locStyles[this.state.locType] || locStyles.info,
+      result, gaugeSvg, status, exceeded, notExceeded, marginText, workRest,
+      showForecast, bars, fcSummary, limitPct, limitLabel, fcLocation: this.state.fcLocation,
+      showRecent: (this.props.showRecentChecks ?? true) && recent.length > 0, recent
+    };
+  }
 }
-
-function setLanguage(lang) {
-    currentLang = lang;
-    document.querySelectorAll(".lang-switcher button").forEach(btn => btn.classList.remove("active"));
-    document.getElementById("lang-" + lang).classList.add("active");
-    translatePage(lang);
-    const resultBox = document.getElementById("result");
-    if (resultBox.style.display === "block") {
-        calculateMetrics();
-    }
-}
-
-function getLocationAndWeather() {
-    const btn = document.getElementById("locationBtn");
-    const t = translations[currentLang];
-    if (!navigator.geolocation) {
-        alert(t.location_error);
-        return;
-    }
-    btn.disabled = true;
-    btn.innerText = t.location_loading;
-    navigator.geolocation.getCurrentPosition(async pos => {
-        const { latitude, longitude } = pos.coords;
-        try {
-            const res = await fetch(
-                `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m`
-            );
-            const data = await res.json();
-            const temp = data.current.temperature_2m;
-            const hum = data.current.relative_humidity_2m;
-            document.getElementById("temp").value = temp;
-            document.getElementById("humidity").value = hum;
-        } catch {
-            alert(t.location_error);
-        }
-        btn.disabled = false;
-        btn.innerText = t.use_location;
-    }, () => {
-        alert(t.location_error);
-        btn.disabled = false;
-        btn.innerText = t.use_location;
-    }, { timeout: 10000 });
-}
-
-function calculateMetrics() {
-    const ta = parseFloat(document.getElementById("temp").value);
-    const rh = parseFloat(document.getElementById("humidity").value);
-    const limit = parseFloat(document.getElementById("workload").value);
-    const resultBox = document.getElementById("result");
-    const t = translations[currentLang];
-
-    if (isNaN(ta) || isNaN(rh)) {
-        alert(t.alert);
-        return;
-    }
-
-    let twb = ta * Math.atan(0.151977 * Math.sqrt(rh + 8.313659))
-            + Math.atan(ta + rh)
-            - Math.atan(rh - 1.676331)
-            + 0.00391838 * Math.pow(rh, 1.5) * Math.atan(0.023101 * rh)
-            - 4.686035;
-
-    let wbgt = (0.7 * twb) + (0.3 * ta);
-    wbgt = Math.round(wbgt * 10) / 10;
-
-    document.getElementById("wbgt-val").innerText = wbgt + " " + t.wbgt_unit;
-    document.getElementById("limit-val").innerText = limit + " " + t.wbgt_unit;
-    resultBox.style.display = "block";
-
-    const actionsDiv = document.getElementById("legal-actions");
-
-    if (wbgt >= limit) {
-        resultBox.className = "result-box danger";
-        document.getElementById("status-title").innerText = t.status_title_danger;
-        actionsDiv.innerHTML = `
-            <p><strong>${t.danger_heading}</strong></p>
-            <ul class="actions-list">
-                <li>${t.danger_1}</li>
-                <li>${t.danger_2}</li>
-                <li>${t.danger_3}</li>
-            </ul>
-        `;
-    } else {
-        resultBox.className = "result-box safe";
-        document.getElementById("status-title").innerText = t.status_title_safe;
-        actionsDiv.innerHTML = `<p>${t.safe_text}</p>`;
-    }
-}
-
-translatePage('nl');
 </script>
-
-<script>
-if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("sw.js");
-}
-</script>
-
 </body>
 </html>
